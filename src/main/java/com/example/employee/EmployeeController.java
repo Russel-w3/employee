@@ -33,4 +33,19 @@ public class EmployeeController {
         }
         return null;
     }
+
+    @GetMapping
+    public List<Employee> index(@RequestParam(required = false) String gender){
+        List<Employee> result = new ArrayList<>();
+        for(Employee employee : employees){
+            if(employee.gender().compareToIgnoreCase(gender) == 0){
+                result.add(employee);
+            }
+        }
+        return result;
+    }
+
+    public void clear(){
+        employees.clear();
+    }
 }

@@ -1,10 +1,12 @@
 package com.example.employee;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
@@ -22,6 +24,12 @@ public class EmployeeControllerTest {
 
     @Autowired
     private EmployeeController employeeController;
+
+    @BeforeEach
+    public void setUp() {
+        employeeController = new EmployeeController();
+        employeeController.clear();
+    }
 
     @Test
     public void should_return_created_employee_when_post() throws Exception {
@@ -62,6 +70,23 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.age").value(expectedEmployee.age()))
                 .andExpect(jsonPath("$.gender").value(expectedEmployee.gender()))
                 .andExpect(jsonPath("$.salary").value(expectedEmployee.salary()));
+    }
+
+    @Test
+    public void should_return_males_employee_when_list_by_male() throws Exception {
+        Employee expectedEmployee = employeeController.create(new Employee(null, "John Smith", 32, "Male", 5000.0));
+        employeeController.create(new Employee(null, "Lily", 22, "Female", 5000.0));
+        MockHttpServletRequestBuilder request = get("/employees?gender=male")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].id").value(expectedEmployee.id()))
+                .andExpect(jsonPath("$[0].name").value(expectedEmployee.name()))
+                .andExpect(jsonPath("$[0].age").value(expectedEmployee.age()))
+                .andExpect(jsonPath("$[0].gender").value(expectedEmployee.gender()))
+                .andExpect(jsonPath("$[0].salary").value(expectedEmployee.salary()));
     }
 
 }
