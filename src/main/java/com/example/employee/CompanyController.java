@@ -14,9 +14,19 @@ public class CompanyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    private Company createCompany(@RequestBody Company company) {
+    public Company createCompany(@RequestBody Company company) {
         Company company1 = new Company(companyList.size() + 1, company.name());
         companyList.add(company1);
         return company1;
+    }
+
+    @GetMapping("/{id}")
+    public Company findById(@PathVariable int id) {
+        for (Company company : companyList) {
+            if (company.id().equals(id)) {
+                return company;
+            }
+        }
+        return null;
     }
 }
