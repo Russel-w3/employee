@@ -12,8 +12,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -100,6 +99,18 @@ public class EmployeeControllerTest {
         mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2));
+    }
+
+    @Test
+    public void should_return_new_employee_when_update_an_employee() throws Exception {
+        Employee expectedEmployee = employeeController.create(new Employee(null, "John Smith", 32, "Male", 5000.0));
+        MockHttpServletRequestBuilder request = put("/employees/" + expectedEmployee.id())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("felix"))
+                .andExpect(jsonPath("$.salary").value(3000.0));
     }
 
 

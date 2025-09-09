@@ -48,6 +48,23 @@ public class EmployeeController {
         return result;
     }
 
+    @PutMapping("/{id}")
+    public Employee update(@PathVariable int id){
+        Employee oldEmployee = null;
+        for(Employee employee : employees) {
+            if (employee.id() == id) {
+                oldEmployee = employee;
+            }
+        }
+        if(oldEmployee == null){
+            return null;
+        }
+        Employee newEmployee = new Employee(oldEmployee.id(),"felix", oldEmployee.age(), oldEmployee.gender(), 3000.0);
+        employees.remove(oldEmployee);
+        employees.add(newEmployee);
+        return newEmployee;
+    }
+
     public void clear(){
         employees.clear();
     }
