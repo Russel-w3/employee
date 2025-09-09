@@ -96,4 +96,20 @@ public class CompanyControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+    @Test
+    public void should_return_companies_page_when_query_page() throws Exception {
+        Company company = new Company(null,"spring");
+        Company company1 = new Company(null,"oracle");
+        Company company2 = new Company(null,"microsoft");
+        companyController.createCompany(company);
+        companyController.createCompany(company1);
+        companyController.createCompany(company2);
+
+        MockHttpServletRequestBuilder request = get("/companies?page=1&size=2")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2));
+    }
 }

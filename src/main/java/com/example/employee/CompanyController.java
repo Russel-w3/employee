@@ -48,8 +48,19 @@ public class CompanyController {
     }
 
     @GetMapping
-    public List<Company> findAll() {
-        return companyList;
+    public List<Company> find(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+        if(page == null || size == null) {
+            return companyList;
+        }
+        List<Company> result = new ArrayList<>();
+        int start = (page - 1) * size;
+        int end = page * size;
+        for(Company company : companyList) {
+            if(company.id() > start && company.id() <= end) {
+                result.add(company);
+            }
+        }
+        return result;
     }
 
     @DeleteMapping("/{id}")
