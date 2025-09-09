@@ -75,7 +75,7 @@ public class CompanyControllerTest {
     }
 
     @Test
-    public void should_return_new_company_when_update_an_employee() throws Exception {
+    public void should_return_new_company_when_update_an_company() throws Exception {
         Company company = new Company(null,"spring");
         Company expectedCompany = companyController.createCompany(company);
         MockHttpServletRequestBuilder request = put("/companies/" + expectedCompany.id())
@@ -85,4 +85,5 @@ public class CompanyControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("oracle"));
     }
+
 }
