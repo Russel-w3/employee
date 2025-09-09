@@ -47,6 +47,11 @@ public class CompanyController {
         return newCompany;
     }
 
+    @GetMapping
+    public List<Company> findAll() {
+        return companyList;
+    }
+
     public void clear() {
         companyList.clear();
     }

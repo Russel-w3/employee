@@ -61,6 +61,20 @@ public class CompanyControllerTest {
     }
 
     @Test
+    public void should_return_company_list_when_get_company_with_no_param() throws Exception {
+        Company company = new Company(null,"spring");
+        Company company1 = new Company(null,"oracle");
+        companyController.createCompany(company);
+        companyController.createCompany(company1);
+        MockHttpServletRequestBuilder request = get("/companies")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2));
+    }
+
+    @Test
     public void should_return_new_company_when_update_an_employee() throws Exception {
         Company company = new Company(null,"spring");
         Company expectedCompany = companyController.createCompany(company);
