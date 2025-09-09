@@ -86,4 +86,14 @@ public class CompanyControllerTest {
                 .andExpect(jsonPath("$.name").value("oracle"));
     }
 
+    @Test
+    public void should_return_204_when_delete_a_company() throws Exception {
+        Company company = new Company(null,"spring");
+        Company expectedCompany = companyController.createCompany(company);
+        MockHttpServletRequestBuilder request = delete("/companies/" + expectedCompany.id());
+
+        mockMvc.perform(request)
+                .andExpect(status().isNoContent());
+    }
+
 }
