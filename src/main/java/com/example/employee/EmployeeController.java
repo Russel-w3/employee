@@ -19,8 +19,18 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.CREATED)
     public Employee create(@RequestBody Employee employee){
         int id = ++this.id;
-        Employee newEmployee = new Employee(1, employee.name(), employee.age(), employee.gender(), employee.salary());
+        Employee newEmployee = new Employee(id, employee.name(), employee.age(), employee.gender(), employee.salary());
         employees.add(newEmployee);
         return newEmployee;
+    }
+
+    @GetMapping("/{id}")
+    public Employee findById(@PathVariable int id){
+        for (Employee employee : employees) {
+            if(employee.id().equals(id)){
+                return employee;
+            }
+        }
+        return null;
     }
 }
