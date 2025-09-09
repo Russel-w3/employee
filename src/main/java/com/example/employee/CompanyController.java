@@ -29,4 +29,25 @@ public class CompanyController {
         }
         return null;
     }
+
+    @PutMapping("/{id}")
+    public Company updateCompany(@PathVariable int id) {
+        Company oldCompany = null;
+        for(Company company : companyList) {
+            if (company.id().equals(id)) {
+                oldCompany = company;
+            }
+        }
+        if(oldCompany == null) {
+            return null;
+        }
+        Company newCompany = new Company(id, "oracle");
+        companyList.remove(oldCompany);
+        companyList.add(newCompany);
+        return newCompany;
+    }
+
+    public void clear() {
+        companyList.clear();
+    }
 }

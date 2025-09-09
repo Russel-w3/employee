@@ -9,8 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,6 +22,11 @@ public class CompanyControllerTest {
 
     @Autowired
     private CompanyController companyController;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        companyController.clear();
+    }
 
     @Test
     public void should_return_created_companies_when_post() throws Exception {
@@ -56,4 +60,15 @@ public class CompanyControllerTest {
                 .andExpect(jsonPath("$.name").value(expectedCompany.name()));
     }
 
+    @Test
+    public void should_return_new_company_when_update_an_employee() throws Exception {
+        Company company = new Company(null,"spring");
+        Company expectedCompany = companyController.createCompany(company);
+        MockHttpServletRequestBuilder request = put("/companies/" + expectedCompany.id())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("oracle"));
+    }
 }
