@@ -123,4 +123,18 @@ public class EmployeeControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+    @Test
+    public void should_return_page_when_query_page() throws Exception {
+        Employee employee1 = employeeController.create(new Employee(null, "John Smith", 32, "Male", 5000.0));
+        Employee employee2 = employeeController.create(new Employee(null, "John", 32, "Male", 5000.0));
+        Employee employee3 = employeeController.create(new Employee(null, "John2", 32, "Male", 5000.0));
+
+        MockHttpServletRequestBuilder request = get("/employees?page=1&size=2")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2));
+    }
+
 }
