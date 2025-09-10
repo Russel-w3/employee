@@ -78,8 +78,14 @@ public class CompanyControllerTest {
     public void should_return_new_company_when_update_an_company() throws Exception {
         Company company = new Company(null,"spring");
         Company expectedCompany = companyController.createCompany(company);
+        String requestBody = """
+                {
+                    "name":"oracle"
+                }
+                """;
         MockHttpServletRequestBuilder request = put("/companies/" + expectedCompany.id())
-                .contentType(MediaType.APPLICATION_JSON);
+                .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody);
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())

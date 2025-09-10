@@ -31,17 +31,17 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public Company updateCompany(@PathVariable int id) {
+    public Company updateCompany(@PathVariable int id, @RequestBody Company company) {
         Company oldCompany = null;
-        for(Company company : companyList) {
-            if (company.id().equals(id)) {
-                oldCompany = company;
+        for(Company c : companyList) {
+            if (c.id().equals(id)) {
+                oldCompany = c;
             }
         }
         if(oldCompany == null) {
             return null;
         }
-        Company newCompany = new Company(id, "oracle");
+        Company newCompany = new Company(id, company.name());
         companyList.remove(oldCompany);
         companyList.add(newCompany);
         return newCompany;
